@@ -83,5 +83,7 @@ Function Upload-Contacts
 
     Write-Host $Body
 
+    $Response = Invoke-WebRequest -Uri "https://www.blackboardconnected.com/contacts/importer_portal.asp?qDest=imp" -Method POST -Body $Body -ContentType "multipart/form-data; boundary=$Boundary" 
+    $Response
 
 }
