@@ -20,10 +20,7 @@ Function Render-MultiPartFormFields
             $ReturnString += "Content-Disposition: form-data; name=""$($Field.Key)""`r`n`r`n"
             $ReturnString += "$($Field.Value)`r`n"
         }
-        
-
     }
-
     
     $ReturnString +="$Boundary--`r`n"
 
@@ -33,7 +30,6 @@ Function Render-MultiPartFormFields
 Function Upload-Contacts
 {
     <#
-
     .PARAMETER UserName
         UserName for the BlackBoard Connect Upload Service
 
@@ -50,7 +46,6 @@ Function Upload-Contacts
         Will only update the fields provided in the upload.  
         Fields with blank data for a contact will be cleared.  
         ReferenceCode is required when this is selected.
-
     #>
     Param(
         [String]
@@ -80,13 +75,9 @@ Function Upload-Contacts
     $UploadFields['fFile'] = "Users.csv"
     $UploadFields['fSubmit'] = 1
 
-    $Body = $(Render-MultiPartFormFields -FieldsHash $UploadFields -Boundary $Boundary)
+    $PostBody = $(Render-MultiPartFormFields -FieldsHash $UploadFields -Boundary $Boundary)
 
-    Write-Host $Body
-
-   
-
-    $Response = Invoke-WebRequest -Uri "https://www.blackboardconnected.com/contacts/importer_portal.asp?qDest=imp" -Method POST -Body $Body -ContentType "multipart/form-data; boundary=$Boundary" -UserAgent "Mozilla/4.0 (compatible; Win32; WinHttp.WinHttpRequest.5)"    
+    $Response = Invoke-WebRequest -Uri "https://www.blackboardconnected.com/contacts/importer_portal.asp?qDest=imp" -Method POST -Body $PostBody -ContentType "multipart/form-data; boundary=$Boundary" -UserAgent "Mozilla/4.0 (compatible; Win32; WinHttp.WinHttpRequest.5)"    
     
     $Response
 
