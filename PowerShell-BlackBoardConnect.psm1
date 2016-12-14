@@ -9,22 +9,23 @@ Function Render-MultiPartFormFields
     {
         if ($Field.Key -eq "fFile")
         {
-            $ReturnString += $Boundary + "`n"
-            $ReturnString += "form-data; name=""fFile""; filename=""$($Field.Value)"""
-            $ReturnString += "Content-Type: text/plain`n`n"
-            $ReturnString += Get-Content $($Field.Value)
+            $ReturnString += $Boundary + "`r`n"
+            $ReturnString += "Content-Disposition: form-data; name=""fFile""; filename=""staff_upload.txt""`r`n"
+            $ReturnString += "Content-Type: text/plain`r`n`r`n"
+            $ReturnString += Get-Content $($Field.Value) -Raw
+            $ReturnString += "`r`n"
         }
         else {
-            $ReturnString += $Boundary + "`n"
-            $ReturnString += "Content-Disposition: form-data; name=""$($Field.Key)""`n`n"
-            $ReturnString += "$($Field.Value)`n"
+            $ReturnString += $Boundary + "`r`n"
+            $ReturnString += "Content-Disposition: form-data; name=""$($Field.Key)""`r`n`r`n"
+            $ReturnString += "$($Field.Value)`r`n"
         }
         
 
     }
 
     
-    $ReturnString +="$Boundary--"
+    $ReturnString +="$Boundary--`r`n"
 
     $ReturnString
 }
@@ -83,7 +84,10 @@ Function Upload-Contacts
 
     Write-Host $Body
 
-    $Response = Invoke-WebRequest -Uri "https://www.blackboardconnected.com/contacts/importer_portal.asp?qDest=imp" -Method POST -Body $Body -ContentType "multipart/form-data; boundary=$Boundary" 
+   
+
+    $Response = Invoke-WebRequest -Uri "https://www.blackboardconnected.com/contacts/importer_portal.asp?qDest=imp" -Method POST -Body $Body -ContentType "multipart/form-data; boundary=$Boundary" -UserAgent "Mozilla/4.0 (compatible; Win32; WinHttp.WinHttpRequest.5)"    
+    
     $Response
 
 }
