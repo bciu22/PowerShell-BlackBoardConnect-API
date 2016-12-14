@@ -37,10 +37,12 @@ Function Upload-Contacts
         Password for the BlackBoard Connect Upload Service
     
     .PARAMETER ContactType
-        The ContactType to assign to contacts in this uplaod.
+        The ContactType to assign to contacts in this upload.
                     
     .PARAMETER RefreshType
-        Any of the Contact Types you select below will be removed and replaced by Contact Type data in your import file.
+        All contacts of the selected tpye wil be removed and replaced by Contact Type data in your import file.  
+        Selecting anything other than "None" presents a risk of data loss.  
+        Selecting "None" will only affect the contacts contained in your file.
                     
     .PARAMETER PreserveData
         Will only update the fields provided in the upload.  
@@ -55,9 +57,9 @@ Function Upload-Contacts
         [ValidateSet("All","Student","Admin","Faculty","Staff","Other")]
         [String]
         $ContactType,
-        [ValidateSet("All","Student","Admin","Faculty","Staff","Other")]
+        [ValidateSet("All","Student","Admin","Faculty","Staff","Other","None")]
         [String]
-        $RefreshType,
+        $RefreshType="None",
         [bool]
         $PreserveData = $true ,
         [String]
@@ -70,7 +72,10 @@ Function Upload-Contacts
     $UploadFields['fNTIUser'] = $UserName
     $UploadFields['fNTIPassEnc'] = $Password
     $UploadFields['fContactType'] = $ContactType
-    $UploadFields['fRefreshType'] = $RefreshType
+    if ( $RefreshType -ne "None" )
+    {
+        $UploadFields['fRefreshType'] = $RefreshType
+    }
     $UploadFields['fPreserveData'] = [int]$PreserveData
     $UploadFields['fFile'] = "Users.csv"
     $UploadFields['fSubmit'] = 1
