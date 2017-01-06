@@ -77,7 +77,7 @@ Function Upload-Contacts
         $UploadFields['fRefreshType'] = $RefreshType
     }
     $UploadFields['fPreserveData'] = [int]$PreserveData
-    $UploadFields['fFile'] = "Users.csv"
+    $UploadFields['fFile'] = $UploadFilePath
     $UploadFields['fSubmit'] = 1
 
     $PostBody = $(Render-MultiPartFormFields -FieldsHash $UploadFields -Boundary $Boundary)
