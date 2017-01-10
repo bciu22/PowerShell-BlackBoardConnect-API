@@ -87,3 +87,78 @@ Function Upload-Contacts
     $Response
 
 }
+
+Function New-AttendanceCall
+{
+ <#
+    .PARAMETER UserName
+        UserName for the BlackBoard Connect Upload Service
+
+    .PARAMETER Password
+        Password for the BlackBoard Connect Upload Service
+
+    .PARAMETER ContactType
+        The ContactType to assign to contacts in this upload.
+
+    .PARAMETER TemplateName
+        Name of the BlackBoard Connect Attendance Template to use
+
+    .PARAMETER CallTime
+        This is the time the call will be scheduled on the website.
+        Defaults to 7:30:00 PM
+        It should be formatted by XX:XX:XX AM. 
+        Set blank if you would like to schedule immediately 
+
+    .PARAMETER TimeZone
+        Your TimeZone
+        Defaults to ET
+
+    .PARAMETER AttCode
+        List of Attendance Codes
+
+    .PARAMETER AttendanceFile
+        File containing Attendance Call Data
+#>
+    Param(
+        [String]
+        $UserName,
+        [String]
+        $Password,
+        [ValidateSet("All","Student","Admin","Faculty","Staff","Other")]
+        [String]
+        $ContactType,
+        [ValidateSet("All","Student","Admin","Faculty","Staff","Other","None")]
+        [String]
+        $TemplateName,
+        [String]
+        $CallTime = "07:30:00 PM",
+        [String]
+        $TimeZone = "ET",
+        [String]
+        $AttCode,
+        [String]
+        $AttendanceFile
+    )
+
+    $Boundary = "-----------------------------AaB03x"
+    
+    $UploadFields = @{}
+    $UploadFields['fNTIUser'] = $UserName
+    $UploadFields['fNTIPassEnc'] = $Password
+    $UploadFields['fContactType'] = $ContactType
+    if ( $RefreshType -ne "None" )
+    {
+        $UploadFields['fRefreshType'] = $RefreshType
+    }
+    $UploadFields['fMessageTitle'] = $TemplateName
+    $UploadFields['fNTITime'] = $CallTime
+    $UploadFields['fNTITimeZone'] = $TimeZone
+    $UploadFields['fFile'] = $UploadFilePath
+    $UploadFields['fSubmit'] = 1
+
+    $PostBody = $(Render-MultiPartFormFields -FieldsHash $UploadFields -Boundary $Boundary)
+
+    $Response = Invoke-WebRequest -Uri "https://upload.blackboardconnect.com/AutoNotification/SendNotification" -Method POST -Body $PostBody -ContentType "multipart/form-data; boundary=$Boundary" -UserAgent "Mozilla/4.0 (compatible; Win32; WinHttp.WinHttpRequest.5)"    
+    
+    $Response
+}
