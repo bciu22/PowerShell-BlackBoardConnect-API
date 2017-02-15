@@ -10,7 +10,7 @@ Function Render-MultiPartFormFields
         if ($Field.Key -eq "fFile")
         {
             $ReturnString += $Boundary + "`r`n"
-            $ReturnString += "Content-Disposition: form-data; name=""fFile""; filename=""staff_upload.txt""`r`n"
+            $ReturnString += "Content-Disposition: form-data; name=""fFile""; filename=""upload.txt""`r`n"
             $ReturnString += "Content-Type: text/plain`r`n`r`n"
             $ReturnString += Get-Content $($Field.Value) -Raw
             $ReturnString += "`r`n"
@@ -127,12 +127,12 @@ Function New-AttendanceCall
         [ValidateSet("All","Student","Admin","Faculty","Staff","Other")]
         [String]
         $ContactType,
-        [ValidateSet("All","Student","Admin","Faculty","Staff","Other","None")]
         [String]
         $TemplateName,
         [String]
         $CallTime = "07:30:00 PM",
         [String]
+        [ValidateSet("HA","AK","PT","MT","CT","ET","AT")]
         $TimeZone = "ET",
         [String]
         $AttCode,
@@ -144,17 +144,12 @@ Function New-AttendanceCall
     
     $UploadFields = @{}
     $UploadFields['fNTIUser'] = $UserName
-    $UploadFields['fNTIPassEnc'] = $Password
+    $UploadFields['fNTIPass'] = $Password
     $UploadFields['fContactType'] = $ContactType
-    if ( $RefreshType -ne "None" )
-    {
-        $UploadFields['fRefreshType'] = $RefreshType
-    }
     $UploadFields['fMessageTitle'] = $TemplateName
     $UploadFields['fNTITime'] = $CallTime
     $UploadFields['fNTITimeZone'] = $TimeZone
-    $UploadFields['fFile'] = $UploadFilePath
-    $UploadFields['fSubmit'] = 1
+    $UploadFields['fFile'] = $AttendanceFile
 
     $PostBody = $(Render-MultiPartFormFields -FieldsHash $UploadFields -Boundary $Boundary)
 
