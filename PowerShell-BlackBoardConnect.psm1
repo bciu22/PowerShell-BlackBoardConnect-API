@@ -140,7 +140,12 @@ Function New-AttendanceCall
         $AttendanceFile
     )
 
-    $Boundary = "-----------------------------AaB03x"
+    if (-Not $(Test-Path $AttendanceFile))
+    {
+        Throw "Attendance File required."
+    }
+    
+    $Boundary = "-------------------------AaB03x"
     
     $UploadFields = @{}
     $UploadFields['fNTIUser'] = $UserName
