@@ -90,35 +90,35 @@ Function Upload-Contacts
 
 Function New-AttendanceCall
 {
- <#
-    .PARAMETER UserName
-        UserName for the BlackBoard Connect Upload Service
+    <#
+        .PARAMETER UserName
+            UserName for the BlackBoard Connect Upload Service
 
-    .PARAMETER Password
-        Password for the BlackBoard Connect Upload Service
+        .PARAMETER Password
+            Password for the BlackBoard Connect Upload Service
 
-    .PARAMETER ContactType
-        The ContactType to assign to contacts in this upload.
+        .PARAMETER ContactType
+            The ContactType to assign to contacts in this upload.
 
-    .PARAMETER TemplateName
-        Name of the BlackBoard Connect Attendance Template to use
+        .PARAMETER TemplateName
+            Name of the BlackBoard Connect Attendance Template to use
 
-    .PARAMETER CallTime
-        This is the time the call will be scheduled on the website.
-        Defaults to 7:30:00 PM
-        It should be formatted by XX:XX:XX AM. 
-        Set blank if you would like to schedule immediately 
+        .PARAMETER CallTime
+            This is the time the call will be scheduled on the website.
+            Defaults to 7:30:00 PM
+            It should be formatted by XX:XX:XX AM. 
+            Set blank if you would like to schedule immediately 
 
-    .PARAMETER TimeZone
-        Your TimeZone
-        Defaults to ET
+        .PARAMETER TimeZone
+            Your TimeZone
+            Defaults to ET
 
-    .PARAMETER AttCode
-        List of Attendance Codes
+        .PARAMETER AttCode
+            List of Attendance Codes
 
-    .PARAMETER AttendanceFile
-        File containing Attendance Call Data
-#>
+        .PARAMETER AttendanceFile
+            File containing Attendance Call Data
+    #>
     Param(
         [String]
         $UserName,
